@@ -258,7 +258,7 @@ export const updateJobStatus = async (req, res) => {
 };
 export const createJobFromWeb = async (req, res) => {
     try {
-        const { title, description, budget, address, phone, name } = req.body;
+        const { title, description, budget, address, phone, name, latitude, longitude, } = req.body;
         if (!title || !description || !phone || !name) {
             return res.status(400).json({ error: "Faltan campos obligatorios" });
         }
@@ -281,8 +281,8 @@ export const createJobFromWeb = async (req, res) => {
                 description,
                 clientId: webUser.id,
                 budget: budget ? parseFloat(budget) : null,
-                latitude: -34.9205,
-                longitude: -57.9536,
+                latitude: latitude ?? -34.9205,
+                longitude: longitude ?? -57.9536,
                 address: address || null,
                 status: "PENDING",
             },
