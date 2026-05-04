@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { acceptBid, adjustBudget, createJob, getAvailableJobs, getClientJobs, getWorkerFeed, updateJobStatus, } from "../controllers/job.controller.js";
+import { acceptBid, adjustBudget, createJob, createJobFromWeb, getAvailableJobs, getClientJobs, getWorkerFeed, updateJobStatus, } from "../controllers/job.controller.js";
 import { upload } from "../lib/cloudinary.js";
 import { authenticateToken } from "../middlewares/auth.middleware.js";
 const router = Router();
@@ -10,4 +10,5 @@ router.get("/available", getAvailableJobs);
 router.get("/client/:clientId", authenticateToken, getClientJobs);
 router.get("/feed/:workerId", authenticateToken, getWorkerFeed);
 router.patch("/:id/status", authenticateToken, updateJobStatus);
+router.post("/create-from-web", createJobFromWeb);
 export default router;

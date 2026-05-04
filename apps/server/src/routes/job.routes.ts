@@ -3,6 +3,7 @@ import {
   acceptBid,
   adjustBudget,
   createJob,
+  createJobFromWeb,
   getAvailableJobs,
   getClientJobs,
   getWorkerFeed,
@@ -20,5 +21,6 @@ router.get("/available", getAvailableJobs);
 router.get("/client/:clientId", authenticateToken, getClientJobs);
 router.get("/feed/:workerId", authenticateToken, getWorkerFeed);
 router.patch("/:id/status", authenticateToken, updateJobStatus);
+router.post("/create-from-web", createJobFromWeb);
 
 export default router;

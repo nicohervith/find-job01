@@ -256,3 +256,41 @@ export const updateJobStatus = async (req, res) => {
         res.status(500).json({ error: "No se pudo actualizar el trabajo" });
     }
 };
+export const createJobFromWeb = async (req, res) => {
+    try {
+        const { title, description, budget, address, phone, name } = req.body;
+        if (!title || !description || !phone || !name) {
+            return res.status(400).json({ error: "Faltan campos obligatorios" });
+        }
+        let webUser = await prisma.user.findFirst({
+            where: { email: "landing@mannyoficioscerca.com.ar" },
+        });
+        if (!webUser) {
+            webUser = await prisma.user.create({
+                data: {
+                    name: "Web Landing",
+                    email: "landing@mannyoficioscerca.com.ar",
+                    password: "no-login",
+                    role: "CLIENT",
+                },
+            });
+        }
+        const newJob = await prisma.job.create({
+            data: {
+                title,
+                description,
+                clientId: webUser.id,
+                budget: budget ? parseFloat(budget) : null,
+                latitude: -34.9205,
+                longitude: -57.9536,
+                address: address || null,
+                status: "PENDING",
+            },
+        });
+        res.status(201).json({ message: "Trabajo publicado", job: newJob });
+    }
+    catch (error) {
+        console.error("Error en createJobFromWeb:", error);
+        res.status(500).json({ error: "Error publicando trabajo" });
+    }
+};
